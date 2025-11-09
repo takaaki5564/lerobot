@@ -10,7 +10,7 @@ if [ -z "$HF_USER" ]; then
 fi
 
 # Dataset name
-DATASET_NAME="${HF_USER}/lerobot-so100-demo"
+DATASET_NAME="${HF_USER}/record-test2"
 TASK_DESCRIPTION="Pick and place object"
 
 echo "Recording demonstration data..."
@@ -26,18 +26,19 @@ echo "4. Wait for reset period between episodes"
 echo ""
 
 lerobot-record \
-    --robot-type=so100 \
-    --robot-port=/dev/ttyACM0 \
-    --robot-config-name=my_awesome_follower_arm \
-    --robot-cameras='{"front": {"type": "opencv", "index_or_path": 0, "width": 640, "height": 480, "fps": 30}}' \
-    --teleop-type=so100 \
-    --teleop-port=/dev/ttyACM1 \
-    --teleop-config-name=my_awesome_leader_arm \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0 \
+    --robot.id=my_awesome_follower_arm \
+    --robot.cameras='{ \
+        "front_close": {"type": "opencv", "index_or_path": 0, "width": 640, "height": 480, "fps": 30}, \
+        "front_wide": {"type": "opencv", "index_or_path": 1, "width": 640, "height": 480, "fps": 30}}' \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_awesome_leader_arm \
     --display_data=true \
-    --repo-id=$DATASET_NAME \
-    --num-episodes=5 \
-    --episode-time-s=30 \
-    --reset-time-s=10 \
-    --fps=30 \
-    --push-to-hub=false \
-    --single-task="$TASK_DESCRIPTION"
+    --dataset.repo_id=$DATASET_NAME \
+    --dataset.num_episodes=5 \
+    --dataset.episode_time_s=30 \
+    --dataset.reset_time_s=10 \
+    --dataset.push_to_hub=true \
+    --dataset.single_task="$TASK_DESCRIPTION"

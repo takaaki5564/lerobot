@@ -31,10 +31,21 @@ huggingface-cli whoami || huggingface-cli login
 
 # Push dataset to hub
 echo "Pushing dataset to HuggingFace Hub..."
-cd data
-lerobot-push-dataset-to-hub \
-    --repo-id=$DATASET_NAME \
-    --local-dir=$(basename $DATASET_NAME)
+# Note: In the latest version, push_to_hub is done during recording
+# If you recorded with --dataset.push_to_hub=false, you can manually push using:
+python -c "
+from lerobot.datasets import LeRobotDataset
+from huggingface_hub import HfApi
+dataset = LeRobotDataset('$LOCAL_DIR')
+api = HfApi()
+api.upload_folder(
+    folder_path='$LOCAL_DIR',
+    repo_id='$DATASET_NAME',
+    repo_type='dataset',
+    create_pr=False
+)
+print('Dataset uploaded successfully!')
+"
 
 echo ""
 echo "Dataset uploaded successfully!"

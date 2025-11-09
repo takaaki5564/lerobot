@@ -7,6 +7,6 @@ sudo chmod 666 /dev/ttyACM1
 
 echo "Starting leader arm calibration..."
 lerobot-calibrate \
-    --robot-type=so100 \
-    --robot-port=/dev/ttyACM1 \
-    --robot-config-name=my_awesome_leader_arm
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/ttyACM1 \
+    --teleop.id=my_awesome_leader_arm

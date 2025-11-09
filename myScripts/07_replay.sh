@@ -17,12 +17,8 @@ echo "Make sure the robot is in a safe starting position"
 echo "Press ENTER to start replay..."
 read
 
-lerobot-eval \
-    --policy.path=$DATASET_NAME \
-    --policy.device=cpu \
-    --env.type=real \
-    --env.robot-type=so100 \
-    --env.robot-port=/dev/ttyACM0 \
-    --env.robot-config-name=my_awesome_follower_arm \
-    --eval.n_episodes=1 \
-    --eval.batch_size=1
+# Note: Direct replay functionality may not be available in latest version
+# This shows how to visualize recorded data instead
+lerobot-dataset-viz \
+    --dataset.repo_id=$DATASET_NAME \
+    --dataset.episode=$EPISODE_NUM
