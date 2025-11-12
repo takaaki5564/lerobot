@@ -17,8 +17,9 @@ echo "Make sure the robot is in a safe starting position"
 echo "Press ENTER to start replay..."
 read
 
-# Note: Direct replay functionality may not be available in latest version
-# This shows how to visualize recorded data instead
-lerobot-dataset-viz \
-    --dataset.repo_id=$DATASET_NAME \
-    --dataset.episode=$EPISODE_NUM
+lerobot-replay \
+    --robot.type=so101_follower \
+    --robot.port=/dev/tty.usbmodem58760431541 \
+    --robot.id=my_awesome_follower_arm \
+    --dataset.repo_id=${HF_USER}/record-test \
+    --dataset.episode=0 # choose the episode you want to replay

@@ -29,15 +29,14 @@ lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
-    --robot.cameras='{"front_close": {"type": "opencv", "index_or_path": /dev/video6, "width": 640, "height": 480, "fps": 30}}' \
+    --robot.cameras='{"front_close": {"type": "opencv", "index_or_path": /dev/video6, "width": 640, "height": 480, "fps": 30}, "front_wide": {"type": "opencv", "index_or_path": /dev/video4", "width": 640, "height": 480, "fps": 30}}' \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm \
-    --display_data=true \
+    --display_data=false \
     --dataset.repo_id="$DATASET_NAME" \
     --dataset.num_episodes=5 \
     --dataset.episode_time_s=30 \
     --dataset.reset_time_s=10 \
-    --resume=true
     --dataset.push_to_hub=true \
     --dataset.single_task="$TASK_DESCRIPTION"
