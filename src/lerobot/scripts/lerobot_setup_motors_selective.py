@@ -99,7 +99,7 @@ def setup_motors_selective(
 
     Args:
         device: Robot or Teleoperator instance
-        motors_to_setup: List of motor names to set up. If None, prompt user for each motor.
+        motors_to_setup: List of motor names or IDs to set up. If None, prompt user for each motor.
         scan_only: If True, only scan and report motors found.
     """
     if not hasattr(device, "bus"):
@@ -138,14 +138,28 @@ def setup_motors_selective(
         motors_to_setup = []
 
     if motors_to_setup:
-        # Validate specified motors
+        # Build mapping from motor ID to motor name
+        id_to_name = {}
+        for name, motor in bus.motors.items():
+            motor_id = motor.id if hasattr(motor, "id") else None
+            if motor_id is not None:
+                id_to_name[str(motor_id)] = name
+
+        # Validate and convert specified motors (can be names or IDs)
         valid_motors = set(bus.motors.keys())
-        for motor in motors_to_setup:
-            if motor not in valid_motors:
+        converted_motors = []
+        for motor_spec in motors_to_setup:
+            # Check if it's a motor name
+            if motor_spec in valid_motors:
+                converted_motors.append(motor_spec)
+            # Check if it's a motor ID
+            elif motor_spec in id_to_name:
+                converted_motors.append(id_to_name[motor_spec])
+            else:
                 raise ValueError(
-                    f"Motor '{motor}' not found. Available motors: {list(valid_motors)}"
+                    f"Motor '{motor_spec}' not found. Available motors (names): {list(valid_motors)} or (IDs): {list(id_to_name.keys())}"
                 )
-        motors_list = motors_to_setup
+        motors_list = converted_motors
     else:
         # Interactive mode: prompt for each motor
         motors_list = list(reversed(bus.motors.keys()))

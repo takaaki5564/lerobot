@@ -21,6 +21,7 @@
 
 import abc
 import logging
+import time
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum
@@ -529,6 +530,9 @@ class MotorsBus(abc.ABC):
         # Set ID
         addr, length = get_address(self.model_ctrl_table, model, "ID")
         self._write(addr, length, initial_id, target_id)
+
+        # Allow motor to process ID change before sending next command
+        time.sleep(0.1)
 
         # Set Baudrate
         addr, length = get_address(self.model_ctrl_table, model, "Baud_Rate")
